@@ -1,0 +1,35 @@
+{
+  "name": "nest-typeorm-docker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prestart:dev": "node -e \"try{require('ts-node/register')}catch{process.exit(0)}\"",
+    "start:dev": "nest start --watch",
+    "start": "nest start",
+    "build": "nest build",
+    "typeorm": "ts-node -r tsconfig-paths/register src/database/data-source.ts",
+    "migration:generate": "typeorm migration:generate -d src/database/data-source.ts src/database/migrations/auto",
+    "migration:run": "typeorm migration:run -d src/database/data-source.ts",
+    "migration:revert": "typeorm migration:revert -d src/database/data-source.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.0",
+    "pg": "^8.12.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.4.0",
+    "@nestjs/schematics": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.0"
+  }
+}
