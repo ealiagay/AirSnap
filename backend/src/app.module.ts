@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import AppDataSource from './database/data-source'   // 👈 el de la APP
-import { UsersModule } from './users/users.module'
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import AppDataSource from "./database/data-source";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
