@@ -2,16 +2,36 @@
   "name": "nest-typeorm-docker",
   "version": "1.0.0",
   "private": true,
+
   "scripts": {
-    "prestart:dev": "node -e \"try{require('ts-node/register')}catch{process.exit(0)}\"",
-    "start:dev": "nest start --watch",
+    "dev": "LOG_SQL=true LOG_CONSOLE=true LOG_LEVEL=debug npm run start:dev",
     "start": "nest start",
+    "start:dev": "NODE_ENV=development nest start --watch -r tsconfig-paths/register",
+    "start:debug": "nest start --debug --watch -r tsconfig-paths/register",
+    "start:prod": "NODE_ENV=production node -r tsconfig-paths/register dist/main.js",
     "build": "nest build",
-    "typeorm": "ts-node -r tsconfig-paths/register src/database/data-source.ts",
-    "migration:generate": "typeorm migration:generate -d src/database/data-source.ts src/database/migrations/auto",
-    "migration:run": "typeorm migration:run -d src/database/data-source.ts",
-    "migration:revert": "typeorm migration:revert -d src/database/data-source.ts"
+    "prebuild": "rimraf dist || true",                         
+
+    "typeorm": "node --require ts-node/register --require tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate src/database/migrations/init -d src/database/data-source.ts",
+    "migration:run": "npm run typeorm -- migration:run -d src/database/data-source.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d src/database/data-source.ts",
+    "schema:drop": "npm run typeorm -- schema:drop -d src/database/data-source.ts",
+
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:restart": "npm run db:down && npm run db:up",
+    "db:logs": "docker compose logs -f db",
+    "db:status": "docker compose ps",
+
+    "db:reset": "npm run schema:drop && npm run migration:run",
+
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format-check": "prettier --check \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix"
   },
+
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^4.0.2",

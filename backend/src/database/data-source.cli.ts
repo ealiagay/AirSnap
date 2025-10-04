@@ -1,9 +1,12 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { config } from 'dotenv'
+import path from 'path'
 import { User } from '../users/user.entity'
 
 config()
+
+const CWD = process.cwd()
 
 export default new DataSource({
   type: 'postgres',
@@ -12,9 +15,9 @@ export default new DataSource({
   username: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_NAME || 'postgres',
-  entities: [User],
-  // 👇 IMPORTANTE: no incluyas .ts aquí (evita que Nest intente cargar TS en runtime)
-  // migrations: ['dist/src/database/migrations/*.js'], // (opcional) si quieres dejarlas
+  entities: [User], // 👈 entidades explícitas
+  // El CLI sí puede trabajar con .ts
+  migrations: [path.join(CWD, 'src', 'database', 'migrations', '*.{ts,js}')],
   synchronize: false,
   logging: true,
 })

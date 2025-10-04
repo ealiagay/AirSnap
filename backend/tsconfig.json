@@ -3,19 +3,24 @@
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
+    "resolveJsonModule": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2018",
+    "esModuleInterop": true,
+    "target": "ES2021",
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    "strictPropertyInitialization": false
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
-  
 }
