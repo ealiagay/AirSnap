@@ -10,6 +10,7 @@ import { NotificacionModule } from './notificacion/notificacion.module'
 import { GeminiModule } from './gemini/gemini.module'
 import { UsuariosModule } from "./usuarios/usuarios.module";
 import { NoticiasModule } from "./noticias/noticias.module";
+import { EvaluacionAireModule } from './evaluacion-aire/evaluacion-aire.module'
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { NoticiasModule } from "./noticias/noticias.module";
     GeminiModule,
     UsuariosModule,
     NoticiasModule,
+    EvaluacionAireModule,
   ],
   providers: [NotificacionService],
 })

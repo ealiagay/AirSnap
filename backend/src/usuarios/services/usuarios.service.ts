@@ -1,29 +1,29 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { USUARIOS_REPOSITORIO } from "../constantes/usuarios.constantes";
-import { IUsuariosRepository } from "../repositories/usuarios.repository";
-import { CrearUsuarioDto } from "../dtos/crear-usuario.dto";
-import { ActualizarUsuarioDto } from "../dtos/actualizar-usuario.dto";
-import { UsuarioEntity } from "../entities/usuario.entity";
+import { Injectable } from '@nestjs/common';
+import { UsuariosRepository } from '../repositories/usuarios.repository';
+import { CrearUsuarioDto } from '../dtos/crear-usuario.dto';
+import { ActualizarUsuarioDto } from '../dtos/actualizar-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
-  constructor(
-    @Inject(USUARIOS_REPOSITORIO)
-    private readonly repositorioUsuarios: IUsuariosRepository
-  ) {}
+  constructor(private readonly repo: UsuariosRepository) {}
 
-  listar(): Promise<UsuarioEntity[]> {
-    return this.repositorioUsuarios.listarUsuarios();
+  listar(params?: { page?: number; limit?: number }) {
+    return this.repo.listar(params?.page, params?.limit);
   }
 
-  crear(payload: CrearUsuarioDto): Promise<UsuarioEntity> {
-    return this.repositorioUsuarios.crearUsuario(payload);
+  obtenerPorId(id: string) {
+    return this.repo.obtenerPorId(id);
   }
 
-  actualizar(
-    idUsuario: string,
-    cambios: ActualizarUsuarioDto
-  ): Promise<UsuarioEntity> {
-    return this.repositorioUsuarios.actualizarUsuario(idUsuario, cambios);
+  crear(dto: CrearUsuarioDto) {
+    return this.repo.crear(dto);
+  }
+
+  actualizar(id: string, dto: ActualizarUsuarioDto) {
+    return this.repo.actualizar(id, dto);
+  }
+
+  eliminar(id: string) {
+    return this.repo.eliminar(id);
   }
 }

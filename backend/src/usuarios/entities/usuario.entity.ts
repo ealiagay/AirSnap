@@ -5,23 +5,30 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Index,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("usuarios")
+@Entity('usuarios')
 export class UsuarioEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Index({ unique: true })
-  @Column({ type: "varchar", length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   correoElectronico!: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: 'varchar', length: 255 })
   nombreCompleto!: string;
 
-  @CreateDateColumn({ name: "fecha_creacion" })
-  fechaCreacion!: Date;
+  @Column({ type: 'date', nullable: true})
+  fechaNacimiento!: Date | null;
 
-  @UpdateDateColumn({ name: "fecha_actualizacion" })
-  fechaActualizacion!: Date;
+  // Guardamos con precisión 6 decimales (mejor que varchar)
+  @Column({ type: 'decimal', precision: 9, scale: 6, nullable: true })
+  latitud!: number | null;
+
+  @Column({ type: 'decimal', precision: 9, scale: 6, nullable: true })
+  longitud!: number | null;
+
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  enfermedad?: string | null;
 }
