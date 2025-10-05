@@ -214,7 +214,7 @@ export default function HomePage() {
 
       {/* Registration Modal */}
       <RegistrationModal
-        open={true}
+        open={showModal}
         onClose={() => setShowModal(false)}
         onComplete={handleModalComplete}
       />
