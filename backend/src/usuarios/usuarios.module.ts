@@ -8,7 +8,7 @@ import { UsuariosRepository } from './repositories/usuarios.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([UsuarioEntity])],
   controllers: [UsuariosController],
-  providers: [UsuariosService, UsuariosRepository],
+  providers: [UsuariosService, UsuariosRepository, ],
   exports: [UsuariosService, UsuariosRepository],
 })
 export class UsuariosModule {}
