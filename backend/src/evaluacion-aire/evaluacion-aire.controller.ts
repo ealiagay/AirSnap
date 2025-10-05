@@ -10,4 +10,5 @@ export class EvaluacionAireController {
   async evaluar(@Body() dto: PeticionEvaluacionAireDto) {
     return this.service.evaluarCalidadAire(dto);
   }
+
 }
