@@ -8,6 +8,8 @@ import { EmailModule } from './email/email.module'
 import { NotificacionService } from './notificacion/notificacion.service'
 import { NotificacionModule } from './notificacion/notificacion.module'
 import { GeminiModule } from './gemini/gemini.module'
+import { UsuariosModule } from "./usuarios/usuarios.module";
+import { NoticiasModule } from "./noticias/noticias.module";
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { GeminiModule } from './gemini/gemini.module'
     EmailModule,
     NotificacionModule,
     GeminiModule,
+    UsuariosModule,
+    NoticiasModule,
   ],
   providers: [NotificacionService],
 })

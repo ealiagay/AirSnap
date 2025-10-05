@@ -1,23 +1,25 @@
-import 'reflect-metadata'
-import { DataSource } from 'typeorm'
-import { config } from 'dotenv'
-import path from 'path'
-import { User } from '../users/user.entity'
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { config } from "dotenv";
+import path from "path";
+import { User } from "../users/user.entity";
+import { NoticiaEntity } from "../noticias/entities/noticia.entity";
+import { PaginaEntity } from "../noticias/entities/pagina.entity";
+import { UsuarioEntity } from "../usuarios/entities/usuario.entity";
 
-config()
-
-const CWD = process.cwd()
+config();
 
 export default new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
+  type: "postgres",
+  host: process.env.DB_HOST || "localhost",
   port: +(process.env.DB_PORT || 5432),
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'postgres',
-  entities: [User], // 👈 entidades explícitas
-  // El CLI sí puede trabajar con .ts
-  migrations: [path.join(CWD, 'src', 'database', 'migrations', '*.{ts,js}')],
+  username: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "postgres",
+  database: process.env.DB_NAME || "postgres",
+  entities: [User, NoticiaEntity, PaginaEntity, UsuarioEntity], // 👈 explícitas
+  migrations: [
+    path.join(process.cwd(), "src", "database", "migrations", "*.{ts,js}"),
+  ],
   synchronize: false,
   logging: true,
-})
+});
