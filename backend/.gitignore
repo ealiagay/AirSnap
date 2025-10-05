@@ -70,3 +70,7 @@ ormconfig.ts
 # ==========================================
 *.bak
 *.tmp
+
+docker-compose.yml
+pakage-lock.json
+package.json
