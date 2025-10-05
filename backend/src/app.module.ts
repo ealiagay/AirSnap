@@ -1,8 +1,13 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import AppDataSource from "./database/data-source";
-import { UsersModule } from "./users/users.module";
+// src/app.module.ts
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import AppDataSource from './database/data-source'
+import { UsersModule } from './users/users.module'
+import { EmailModule } from './email/email.module'
+import { NotificacionService } from './notificacion/notificacion.service'
+import { NotificacionModule } from './notificacion/notificacion.module'
+import { GeminiModule } from './gemini/gemini.module'
 import { UsuariosModule } from "./usuarios/usuarios.module";
 import { NoticiasModule } from "./noticias/noticias.module";
 
@@ -16,8 +21,12 @@ import { NoticiasModule } from "./noticias/noticias.module";
       }),
     }),
     UsersModule,
+    EmailModule,
+    NotificacionModule,
+    GeminiModule,
     UsuariosModule,
     NoticiasModule,
   ],
+  providers: [NotificacionService],
 })
 export class AppModule {}
