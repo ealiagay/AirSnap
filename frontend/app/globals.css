@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -123,4 +124,37 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Leaflet custom styles */
+.leaflet-container {
+  @apply rounded-lg;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply bg-card text-card-foreground shadow-lg;
+  border-radius: var(--radius);
+}
+
+.leaflet-popup-tip {
+  @apply bg-card;
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Loading states */
+.leaflet-loading {
+  @apply opacity-50;
+}
+
+/* Map controls styling */
+.leaflet-control-zoom a {
+  @apply bg-card text-card-foreground border-border;
+}
+
+.leaflet-control-zoom a:hover {
+  @apply bg-muted;
 }

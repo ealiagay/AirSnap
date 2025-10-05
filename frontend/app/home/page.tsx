@@ -1,61 +1,62 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { MapPin, RefreshCw, Wind, AlertCircle, Info } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { AQIGauge } from "@/components/aqi-gauge"
-import { RegistrationModal } from "@/components/registration-modal"
-import { HealthRecommendations } from "@/components/health-recommendations"
+import { useState, useEffect } from "react";
+import { MapPin, RefreshCw, Wind, AlertCircle, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { AQIGauge } from "@/components/aqi-gauge";
+import { RegistrationModal } from "@/components/registration-modal";
+import { HealthRecommendations } from "@/components/health-recommendations";
+import { http } from "@/lib/http";
 
 export default function HomePage() {
-  const [showModal, setShowModal] = useState(false)
-  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 })
-  const [loading, setLoading] = useState(false)
-  const [hasPermission, setHasPermission] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
+  const [loading, setLoading] = useState(false);
+  const [hasPermission, setHasPermission] = useState(false);
 
   useEffect(() => {
     // Check if user has already granted permission
-    const permission = localStorage.getItem("locationPermission")
+    const permission = localStorage.getItem("locationPermission");
     if (permission === "granted") {
-      setHasPermission(true)
-      getLocation()
+      setHasPermission(true);
+      getLocation();
     } else {
-      setShowModal(true)
+      setShowModal(true);
     }
-  }, [])
+  }, []);
 
   const getLocation = () => {
-    setLoading(true)
+    setLoading(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setCoordinates({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          })
-          setLoading(false)
+          });
+          setLoading(false);
         },
         (error) => {
-          console.error("Error getting location:", error)
-          setLoading(false)
-        },
-      )
+          console.error("Error getting location:", error);
+          setLoading(false);
+        }
+      );
     }
-  }
+  };
 
   const handleRefreshLocation = () => {
-    getLocation()
-  }
+    getLocation();
+  };
 
   const handleModalComplete = (email: string, granted: boolean) => {
-    setShowModal(false)
-    setHasPermission(granted)
+    setShowModal(false);
+    setHasPermission(granted);
     if (granted) {
-      localStorage.setItem("locationPermission", "granted")
-      getLocation()
+      localStorage.setItem("locationPermission", "granted");
+      getLocation();
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -86,8 +87,12 @@ export default function HomePage() {
             {/* AQI Gauge Section */}
             <Card className="p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-balance">Medición Actual</h2>
-                <p className="mt-2 text-sm text-muted-foreground">Índice de calidad del aire en tu ubicación</p>
+                <h2 className="text-2xl font-bold text-balance">
+                  Medición Actual
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Índice de calidad del aire en tu ubicación
+                </p>
               </div>
               <AQIGauge value={42} />
             </Card>
@@ -103,7 +108,9 @@ export default function HomePage() {
                   disabled={loading || !hasPermission}
                   className="rounded-full bg-transparent"
                 >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+                  <RefreshCw
+                    className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                  />
                   Reenviar
                 </Button>
               </div>
@@ -115,7 +122,8 @@ export default function HomePage() {
                     <div className="flex-1">
                       <p className="text-sm font-medium">Coordenadas</p>
                       <p className="mt-1 font-mono text-sm text-muted-foreground">
-                        {coordinates.lat.toFixed(4)}° N, {coordinates.lng.toFixed(4)}° W
+                        {coordinates.lat.toFixed(4)}° N,{" "}
+                        {coordinates.lng.toFixed(4)}° W
                       </p>
                     </div>
                   </div>
@@ -124,8 +132,12 @@ export default function HomePage() {
                     <div className="flex items-start gap-3">
                       <Info className="h-5 w-5 text-primary mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium">Estación más cercana</p>
-                        <p className="mt-1 text-xs text-muted-foreground">A 2.3 km de tu ubicación</p>
+                        <p className="text-sm font-medium">
+                          Estación más cercana
+                        </p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          A 2.3 km de tu ubicación
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -133,8 +145,15 @@ export default function HomePage() {
               ) : (
                 <div className="rounded-lg bg-muted p-6 text-center">
                   <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground mb-3" />
-                  <p className="text-sm text-muted-foreground">Permiso de ubicación no otorgado</p>
-                  <Button variant="outline" size="sm" onClick={() => setShowModal(true)} className="mt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Permiso de ubicación no otorgado
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowModal(true)}
+                    className="mt-4"
+                  >
                     Configurar Permisos
                   </Button>
                 </div>
@@ -184,7 +203,9 @@ export default function HomePage() {
               <div>
                 <h3 className="font-semibold">O₃</h3>
                 <p className="mt-1 text-2xl font-bold">45 ppb</p>
-                <p className="mt-1 text-xs text-muted-foreground">Nivel moderado</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Nivel moderado
+                </p>
               </div>
             </div>
           </Card>
@@ -192,7 +213,11 @@ export default function HomePage() {
       </main>
 
       {/* Registration Modal */}
-      <RegistrationModal open={showModal} onClose={() => setShowModal(false)} onComplete={handleModalComplete} />
+      <RegistrationModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onComplete={handleModalComplete}
+      />
     </div>
-  )
+  );
 }

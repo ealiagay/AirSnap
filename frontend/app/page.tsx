@@ -1,188 +1,203 @@
-import Link from "next/link"
-import { Wind, MapPin, Clock, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+"use client";
 
-export default function LandingPage() {
+import { useState } from "react";
+import Link from "next/link";
+import { Wind, ArrowRight, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { AirQualityMap } from "@/components/air-quality-map";
+import { AirQualityDashboard } from "@/components/air-quality-dashboard";
+
+interface AirQualityData {
+  aqi: number;
+  pm25: number;
+  pm10: number;
+  no2: number;
+  o3: number;
+  so2: number;
+  co: number;
+  quality: string;
+  recommendation: string;
+  timestamp: string;
+}
+
+export default function HomePage() {
+  const [airQualityData, setAirQualityData] = useState<AirQualityData | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
+
+  const handleDataReceived = (data: AirQualityData) => {
+    setAirQualityData(data);
+    setLoading(false);
+  };
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-background px-6 py-20 md:py-32">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-            {/* Hero Content */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-medium text-secondary-foreground">
-                <Wind className="h-4 w-4" />
-                <span>Monitoreo en Tiempo Real</span>
+    <div className="min-h-screen bg-background">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="mx-auto max-w-7xl px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Wind className="h-5 w-5 text-primary" />
               </div>
-
-              <h1 className="text-5xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl">
-                Respira con
-                <span className="text-primary"> Confianza</span>
-              </h1>
-
-              <p className="text-lg text-muted-foreground leading-relaxed text-pretty max-w-xl">
-                Monitorea la calidad del aire en tiempo real y recibe recomendaciones personalizadas para cuidar tu
-                salud respiratoria.
-              </p>
-
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <Button asChild size="lg" className="rounded-full">
-                  <Link href="/home">
-                    Comenzar Ahora
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-full bg-transparent">
-                  <Link href="/news">Ver Noticias</Link>
-                </Button>
-              </div>
+              <h1 className="text-2xl font-bold">AirSnap</h1>
             </div>
-
-            {/* Live AQI Preview Card */}
-            <Card className="p-8 shadow-xl">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Calidad del Aire Actual</h3>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>Actualizado hace 5 min</span>
-                  </div>
-                </div>
-
-                {/* AQI Display */}
-                <div className="flex items-center justify-center py-8">
-                  <div className="relative">
-                    <div className="flex h-40 w-40 items-center justify-center rounded-full bg-secondary/20">
-                      <div className="flex h-32 w-32 items-center justify-center rounded-full bg-secondary/40">
-                        <div className="text-center">
-                          <div className="text-4xl font-bold text-secondary-foreground">42</div>
-                          <div className="text-sm font-medium text-muted-foreground">AQI</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Ciudad de México</span>
-                  </div>
-                  <div className="rounded-lg bg-secondary/10 p-4">
-                    <p className="text-sm font-medium text-secondary-foreground">Buena Calidad del Aire</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Condiciones ideales para actividades al aire libre
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <nav className="flex gap-2">
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/">Inicio</a>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/photos">Fotos</a>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/news">Noticias</a>
+              </Button>
+            </nav>
           </div>
         </div>
-      </section>
-
-      {/* Map Preview Section */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-balance">Monitoreo en Tu Área</h2>
-            <p className="mt-4 text-lg text-muted-foreground text-pretty">
-              Visualiza lecturas de calidad del aire cerca de ti
-            </p>
+      </header>
+      {/* Main Content */}
+      <main className="mx-auto max-w-7xl px-6 py-8">
+        {/* Hero Section */}
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-4">
+            <Wind className="h-4 w-4" /> <span>Monitoreo en Tiempo Real</span>
           </div>
-
-          <Card className="overflow-hidden shadow-lg">
-            <div className="aspect-video bg-muted relative">
-              <img
-                src="/air-quality-map-with-pollution-markers.jpg"
-                alt="Mapa de calidad del aire"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex flex-wrap gap-3">
-                  <div className="rounded-full bg-card px-4 py-2 shadow-lg">
-                    <span className="text-sm font-medium">19.4326° N, 99.1332° W</span>
-                  </div>
-                  <div className="rounded-full bg-secondary px-4 py-2 text-secondary-foreground shadow-lg">
-                    <span className="text-sm font-medium">5 estaciones cercanas</span>
-                  </div>
-                </div>
+          <h1 className="text-4xl font-bold tracking-tight mb-4 md:text-5xl">
+            Calidad del Aire en
+            <span className="text-primary"> Tu Ubicación</span>
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
+            Obtén datos precisos de calidad del aire basados en tu ubicación
+            actual o selecciona cualquier punto en el mapa para consultar
+            información detallada.
+          </p>
+          <Card className="p-4 bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 max-w-2xl mx-auto">
+            <div className="flex items-start gap-3">
+              <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                  ¿Cómo funciona?
+                </p>
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  Al entrar, te pediremos acceso a tu ubicación para mostrarte
+                  datos locales. Si prefieres no compartir tu ubicación, puedes
+                  hacer clic en cualquier punto del mapa.
+                </p>
               </div>
             </div>
           </Card>
         </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="px-6 py-20 bg-muted/30">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-8 md:grid-cols-3">
-            <Card className="p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Wind className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-lg font-semibold">Datos en Tiempo Real</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Información actualizada de NASA TEMPO y OpenAQ
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/10">
-                <MapPin className="h-6 w-6 text-secondary" />
-              </div>
-              <h3 className="mb-2 text-lg font-semibold">Monitoreo Local</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Seguimiento preciso de tu ubicación</p>
-            </Card>
-
-            <Card className="p-6 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
-                <Clock className="h-6 w-6 text-accent" />
-              </div>
-              <h3 className="mb-2 text-lg font-semibold">Recomendaciones</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Consejos personalizados para tu salud</p>
-            </Card>
+        {/* Map and Dashboard Layout */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* Map Section */}
+          <div className="space-y-4">
+            <AirQualityMap onDataReceived={handleDataReceived} />
+          </div>
+          {/* Dashboard Section */}
+          <div className="space-y-4">
+            <AirQualityDashboard data={airQualityData} loading={loading} />
           </div>
         </div>
-      </section>
-
+        {/* Additional Actions */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex flex-col sm:flex-row gap-4">
+            <Button asChild size="lg" className="rounded-full">
+              <Link href="/photos">
+                Ver Fotos de Calidad del Aire
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="rounded-full"
+            >
+              <Link href="/news"> Leer Noticias Ambientales </Link>
+            </Button>
+          </div>
+        </div>
+        {/* Quick Info Cards */}
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
+          <Card className="p-6 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+              <Wind className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold">Datos Precisos</h3>
+            <p className="text-sm text-muted-foreground">
+              Información de múltiples fuentes incluyendo NASA TEMPO y OpenAQ
+            </p>
+          </Card>
+          <Card className="p-6 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+              <ArrowRight className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold">Fácil de Usar</h3>
+            <p className="text-sm text-muted-foreground">
+              Interfaz intuitiva con datos visuales claros y recomendaciones
+            </p>
+          </Card>
+          <Card className="p-6 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900">
+              <Info className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold">Recomendaciones</h3>
+            <p className="text-sm text-muted-foreground">
+              Consejos personalizados para proteger tu salud respiratoria
+            </p>
+          </Card>
+        </div>
+      </main>
       {/* Footer */}
-      <footer className="border-t px-6 py-12">
-        <div className="mx-auto max-w-7xl">
+      <footer className="border-t bg-muted/30 mt-20">
+        <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="grid gap-8 md:grid-cols-3">
             <div>
-              <h4 className="mb-4 text-lg font-semibold">AirQuality Monitor</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Cuidando tu salud respiratoria con datos precisos y confiables.
+              <div className="flex items-center gap-2 mb-4">
+                <Wind className="h-5 w-5 text-primary" />
+                <h4 className="text-lg font-semibold">AirSnap</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Monitoreo de calidad del aire en tiempo real para cuidar tu
+                salud respiratoria.
               </p>
             </div>
-
             <div>
               <h4 className="mb-4 text-sm font-semibold">Fuentes de Datos</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>NASA TEMPO</li>
-                <li>OpenAQ</li>
-                <li>Estaciones Locales</li>
+                <li>NASA TEMPO</li> <li>OpenAQ</li> <li>Estaciones Locales</li>
+                <li>Sensores Comunitarios</li>
               </ul>
             </div>
-
             <div>
-              <h4 className="mb-4 text-sm font-semibold">Contacto</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>info@airquality.com</li>
-                <li>Soporte 24/7</li>
+              <h4 className="mb-4 text-sm font-semibold">Enlaces</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link
+                    href="/photos"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Galería de Fotos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/news"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Noticias Ambientales
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
-
           <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-            <p>© 2025 AirQuality Monitor. Todos los derechos reservados.</p>
+            <p>© 2025 AirSnap. Cuidando tu salud respiratoria.</p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
